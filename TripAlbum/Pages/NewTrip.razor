@@ -1,0 +1,107 @@
+﻿@page "/newtrip"
+@using TripAlbum.Data
+
+@if (tripInputs == true)
+{
+    <h1>New Trip</h1>
+
+    <p></p>
+    <section>
+        <div style="display:inline-block; width:auto ">
+            <ol class="list-unstyled">
+                <li style="padding:4px"><input placeholder="title" @bind="title" /></li>
+                <li style="padding:4px"><input placeholder="location" @bind="location" /></li>
+                <li style="padding:4px"><input placeholder="transportation" @bind="transportation" /></li>
+                <li style="padding:4px"><input placeholder="details" @bind="details" /></li>
+                <li style="padding:4px">start <input type="date" @bind="startDate" /></li>
+                <li style="padding:4px">end <input type="date" @bind="endDate" /></li>
+
+            </ol>
+            <p></p>
+
+        </div>
+        <div style="display:inline-block; vertical-align:top">
+            <button class="btn btn-secondary" style="padding:4px"> Upload Photos </button>
+
+        </div>
+        <button class="btn btn-primary" style="padding:4px" @onclick="AddNewTrip"> Add Trip </button>
+    </section>
+    <p></p>
+}
+@if (tripTable == true)
+{
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Trip</th>
+                <th>Location</th>
+                <th>Transportation</th>
+                <th>Details</th>
+                <th>Start</th>
+                <th>End</th>
+            </tr>
+        </thead>
+        <tbody>
+            @*@if (this.db.Trips.Count() > 0)
+            {*@
+                @foreach (var trip in trips)
+                {
+                    <tr>
+                        <td>@trip.Title</td>
+                        <td>@trip.Location</td>
+                        <td>@trip.Transportation</td>
+                        <td>@trip.Details</td>
+                        <td>@trip.StartDate</td>
+                        <td>@trip.EndDate</td>
+                    </tr>
+                }
+            @*}  *@
+        </tbody>
+    </table>
+}
+
+@code {
+    private string title;
+    private string location;
+    private DateTime startDate = DateTime.Today;
+    private DateTime endDate = DateTime.Today;
+    private string transportation;
+    private string details;
+    private TripAlbumContext db;
+
+    [Parameter]
+    public Boolean tripInputs { get; set; } = true;
+    [Parameter]
+    public Boolean tripTable { get; set; } = true;
+
+    List<Trip> trips = new List<Trip>();
+
+
+
+    private void AddNewTrip()
+    {
+        
+        if (!string.IsNullOrEmpty(title))
+        {
+            trips.Add(new Trip
+            {
+                Title = title,
+                Location = location,
+                StartDate = startDate,
+                EndDate = endDate,
+                Transportation = transportation,
+                Details = details
+            });
+            //this.db.SaveChanges();
+            title = string.Empty;
+            location = string.Empty;
+            startDate = DateTime.Today;
+            endDate = DateTime.Today;
+            transportation = string.Empty;
+            details = string.Empty;
+
+        }
+    }
+
+}
+
